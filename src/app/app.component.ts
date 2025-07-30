@@ -12,6 +12,8 @@ declare const { LatLng }: google.maps.CoreLibrary
 // declare const {spherical}: typeof  google.maps.geometry;
 
 declare const {spherical}:  google.maps.GeometryLibrary;
+declare const marker :  google.maps.marker.AdvancedMarkerElement;
+
 
 declare global {
   interface Window { google: any; }
@@ -57,8 +59,19 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     this.mapLoaderService.load().then(
       ()=>{
-          const sph = google.maps.geometry.spherical;
-          console.log(sph.computeDistanceBetween({lat:23.79 , lng:90.42},{lat:24.2 , lng:91.11}));
+          const spherical = google.maps.geometry.spherical;
+          console.log(spherical.computeDistanceBetween({lat:23.79 , lng:90.42},{lat:24.2 , lng:91.11}));
+
+          this.initMap()
+          this.getCurrentLocation()
+          let a = new google.maps.LatLng(23.8007, 90.4262)
+
+          // const marker = new marker(a , this.map)
+          
+          this.addMarker(a)
+
+
+          
 
           // sph.computeDistanceBetween({lat:23.79 , lng:90.42},{lat:24.2 , lng:91.11})
           
@@ -125,38 +138,45 @@ export class AppComponent implements OnInit, AfterViewInit {
     //   spherical.computeDistanceBetween( { lat: 23.8, lng: 90.4 } ,  { lat: 23.8, lng: 90.4 }  )
     // }
 
+    
+
   }
 
-  // addMarker(location: any) {
-  //   let marker = new google.maps.Marker({
-  //     position: location,
-  //     map: this.map
-  //   });
-  // }
+  addMarker(location: any) {
+    // let marker =  google.maps.Marker.AdvancedMarkerElement ({
+    //   position: location,
+    //   map: this.map
+    // });
+
+     let marker =  new marker ({
+      position: location,
+      map: this.map
+    });
+  }
 
   // testMarker() {
   //   let CentralPark = new google.maps.LatLng(23.8007, 90.4262);
   //   this.addMarker(CentralPark);
   // }
 
-  // getUserLocation() {
-  //   navigator.geolocation.getCurrentPosition(
-  //     (position) => {
-  //       console.log(position);
+  getUserLocation() {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        console.log(position);
 
-  //       const userLat = position.coords.latitude;
-  //       const userLng = position.coords.longitude;
+        const userLat = position.coords.latitude;
+        const userLng = position.coords.longitude;
 
-  //       const userPosition = new google.maps.LatLng(userLat,userLng) 
+        const userPosition = new google.maps.LatLng(userLat,userLng) 
 
-  //       this.addMarker(userPosition)
-  //       // Use userLat and userLng to center the map or add a marker
-  //     },
-  //     (error) => {
-  //       console.error("Error getting user location:", error);
-  //     }
-  //   )
-  // }
+        this.addMarker(userPosition)
+        // Use userLat and userLng to center the map or add a marker
+      },
+      (error) => {
+        console.error("Error getting user location:", error);
+      }
+    )
+  }
 
 
 
